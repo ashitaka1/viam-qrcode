@@ -3,7 +3,7 @@ import sys
 
 from viam.module.module import Module
 from viam.services.vision import Vision
-from .pyzbar import pyzbar
+from src.pyzbar import pyzbar
 
 async def main():
     """This function creates and starts a new module, after adding all desired resources.

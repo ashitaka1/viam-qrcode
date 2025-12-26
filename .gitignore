@@ -4,3 +4,9 @@ qrExample.png
 .env
 .DS_Store
 module.tar.gz
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+.installed

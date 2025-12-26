@@ -1,0 +1,28 @@
+name: Deploy Viam Module
+
+# See https://github.com/viamrobotics/build-action for documentation
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., 1.0.0) - leave empty to test build without deploying'
+        required: false
+        default: ''
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and deploy module
+        uses: viamrobotics/build-action@v1
+        with:
+          # On release: use the tag name as version
+          # On manual trigger: use input or empty string for testing
+          version: ${{ github.event_name == 'release' && github.ref_name || github.event.inputs.version }}
+          ref: ${{ github.sha }}
+          key-id: ${{ secrets.VIAM_KEY_ID }}
+          key-value: ${{ secrets.VIAM_KEY_VALUE }}
