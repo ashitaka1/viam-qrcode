@@ -52,15 +52,44 @@ class pyzbar(Vision, Reconfigurable):
     # Validates JSON Configuration
     @classmethod
     def validate(cls, config: ComponentConfig):
-        return
+        # Declare camera as a required dependency based on attributes
+        camera_name = config.attributes.fields.get("camera_name")
+        if camera_name:
+            camera_name_str = camera_name.string_value or camera_name.list_value
+            if camera_name_str:
+                # Return the camera as a required dependency
+                return [camera_name_str] if isinstance(camera_name_str, str) else list(camera_name_str)
+        return []
 
     # Handles attribute reconfiguration
     def reconfigure(self, config: ComponentConfig, dependencies: Mapping[ResourceName, ResourceBase]):
         self.DEPS = dependencies
+
+        # Log available dependencies for debugging
+        dep_names = [rn.name for rn in dependencies.keys()]
+        LOGGER.info(f"Reconfiguring with dependencies: {dep_names}")
+
+        # Store the camera name from attributes if provided
+        camera_name_field = config.attributes.fields.get("camera_name")
+        if camera_name_field:
+            self.default_camera_name = camera_name_field.string_value
+            LOGGER.info(f"Default camera configured: {self.default_camera_name}")
+        else:
+            self.default_camera_name = None
+
         return
         
     async def get_cam_image(self, camera_name: str) -> ViamImage:
-        actual_cam = self.DEPS[Camera.get_resource_name(camera_name)]
+        # Find the camera in dependencies by iterating and matching name
+        actual_cam = None
+        for resource_name, resource in self.DEPS.items():
+            if resource_name.name == camera_name:
+                actual_cam = resource
+                break
+
+        if actual_cam is None:
+            raise ValueError(f"Camera '{camera_name}' not found in dependencies. Available: {[rn.name for rn in self.DEPS.keys()]}")
+
         cam = cast(Camera, actual_cam)
         cam_image = await cam.get_image(mime_type="image/jpeg")
         return cam_image
