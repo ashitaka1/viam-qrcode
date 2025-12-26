@@ -4,7 +4,6 @@ from typing_extensions import Self
 from PIL import Image
 from viam.proto.common import PointCloudObject
 from viam.proto.service.vision import Classification, Detection
-from viam.resource.types import RESOURCE_NAMESPACE_RDK, RESOURCE_TYPE_SERVICE, Subtype
 from viam.utils import ValueTypes
 
 
@@ -23,9 +22,6 @@ from viam.media.utils.pil import viam_to_pil_image
 import numpy as np
 import cv2
 from pyzbar.pyzbar import decode
-# import subprocess
-# import urllib.parse
-import time
 
 LOGGER = getLogger(__name__)
 
@@ -35,12 +31,6 @@ class pyzbar(Vision, Reconfigurable):
     """
 
     MODEL: ClassVar[Model] = Model(ModelFamily("joyce", "vision"), "pyzbar")
-    
-    model: None
-
-    last_triggered: dict = {}
-
-    cooldown_period: int = 5
 
     # Constructor
     @classmethod
@@ -68,15 +58,6 @@ class pyzbar(Vision, Reconfigurable):
         # Log available dependencies for debugging
         dep_names = [rn.name for rn in dependencies.keys()]
         LOGGER.info(f"Reconfiguring with dependencies: {dep_names}")
-
-        # Store the camera name from attributes if provided
-        camera_name_field = config.attributes.fields.get("camera_name")
-        if camera_name_field:
-            self.default_camera_name = camera_name_field.string_value
-            LOGGER.info(f"Default camera configured: {self.default_camera_name}")
-        else:
-            self.default_camera_name = None
-
         return
         
     async def get_cam_image(self, camera_name: str) -> ViamImage:
@@ -106,10 +87,15 @@ class pyzbar(Vision, Reconfigurable):
         extra: Optional[Mapping[str, Any]] = None,
         timeout: Optional[float] = None,
     ) -> List[Detection]:
-        # Convert PIL image to ViamImage or OpenCV as needed
+        # Convert PIL image to OpenCV format
         image_cv = np.array(image)
         image_cv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
-        return self.detect_qr_code(ViamImage(data=image_cv.tobytes(), mime_type="image/jpeg"))
+
+        # Encode as JPEG to create proper ViamImage
+        _, encoded = cv2.imencode('.jpg', image_cv)
+        viam_image = ViamImage(data=encoded.tobytes(), mime_type="image/jpeg")
+
+        return await self.detect_qr_code(viam_image)
 
     async def get_classifications(
         self,
@@ -141,14 +127,7 @@ class pyzbar(Vision, Reconfigurable):
         
         for qr_code in qr_codes:
             qr_data = qr_code.data.decode('utf-8')
-            LOGGER.info(f"QR Code detected: {qr_data}")
 
-            # Only trigger action if it hasn't been triggered recently
-            current_time = time.time()
-            if qr_data not in self.last_triggered or (current_time - self.last_triggered[qr_data] > self.cooldown_period):  
-                self.trigger_action_on_qr_code(qr_data)
-                self.last_triggered[qr_data] = current_time
-            
             # Create a Detection object for each QR code detected
             (x, y, w, h) = qr_code.rect
             # Adjust bounding box to align with original image dimensions
@@ -160,10 +139,7 @@ class pyzbar(Vision, Reconfigurable):
             h = int(h * scale_y)
             detection = Detection(x_min=x, y_min=y, x_max=x + w, y_max=y + h, class_name=qr_data, confidence=1.0)
             detections.append(detection)
-        
-        if not qr_codes:
-            LOGGER.info("No QR Code detected")
-        
+
         return detections
     
     def preprocess_image(self, image):
@@ -175,14 +151,6 @@ class pyzbar(Vision, Reconfigurable):
         threshold_image = cv2.threshold(equalized_image, 128, 255, cv2.THRESH_BINARY)[1]
         resized_image = cv2.resize(threshold_image, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_LINEAR)
         return resized_image
-    
-    def trigger_action_on_qr_code(self, qr_data: str):
-        """
-        Trigger an action based on the QR code data.
-        """
-        
-        # Can add custom logic here
-        LOGGER.info(f"Triggering action based on QR Code: {qr_data}")
 
     async def get_classifications_from_camera(self, camera_name: str, count: int, *, extra: Optional[Mapping[str, Any]] = None, timeout: Optional[float] = None) -> List[Classification]:
         """
@@ -198,8 +166,15 @@ class pyzbar(Vision, Reconfigurable):
 
     async def capture_all_from_camera(self, camera_name: str, return_image: bool = False, return_classifications: bool = False, return_detections: bool = False, return_object_point_clouds: bool = False, *, extra: Optional[Mapping[str, Any]] = None, timeout: Optional[float] = None) -> CaptureAllResult:
         result = CaptureAllResult()
-        result.image = await self.get_cam_image(camera_name)
-        result.detections = await self.get_detections_from_camera(camera_name)
+
+        if return_image:
+            result.image = await self.get_cam_image(camera_name)
+
+        if return_detections:
+            result.detections = await self.get_detections_from_camera(camera_name)
+
+        # Classifications and point clouds not supported (always empty)
+
         return result
 
     async def get_properties(self, *, extra: Optional[Mapping[str, Any]] = None, timeout: Optional[float] = None) -> GetPropertiesResponse:
