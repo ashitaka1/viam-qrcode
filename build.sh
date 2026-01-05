@@ -79,12 +79,10 @@ if [ -d "dist/main/_internal/cv2/.dylibs" ]; then
     fi
 fi
 
-# Copy meta.json into dist for packaging
+# Copy meta.json for packaging
 cp meta.json dist/
 
-# Create the archive with the directory and meta.json
-cd dist
-tar -czf archive.tar.gz main meta.json
-cd ..
+# Create the archive with dist/main structure to match entrypoint
+tar -czf dist/archive.tar.gz -C . dist/main meta.json
 
 echo "Build complete! Archive created at dist/archive.tar.gz"
