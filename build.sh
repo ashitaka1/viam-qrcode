@@ -7,18 +7,9 @@ source .venv/bin/activate
 # Clean previous builds
 rm -rf dist build
 
-# Build with PyInstaller
-# Using --collect-all for packages that need their full package structure
-pyinstaller --onefile \
-    --hidden-import=pyzbar.pyzbar \
-    --hidden-import=pyzbar.wrapper \
-    --collect-all=pyzbar \
-    --collect-all=cv2 \
-    --collect-all=google.protobuf \
-    --collect-all=grpclib \
-    --collect-all=viam \
-    --name=main \
-    src/__main__.py
+# Build with PyInstaller using the custom spec file
+# The spec file handles OpenSSL compatibility issues and package collection
+pyinstaller main.spec
 
 # Create the archive
 cd dist

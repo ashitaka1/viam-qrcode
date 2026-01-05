@@ -1,0 +1,430 @@
+===================================================================
+DIAGNOSTIC REPORT
+Generated: Mon Jan  5 10:05:21 EST 2026
+Machine: Kusanagi.local
+===================================================================
+
+############################################################
+# 1. ENVIRONMENT INFORMATION
+############################################################
+=== SYSTEM INFO ===
+ProductName:		macOS
+ProductVersion:		26.2
+BuildVersion:		25C56
+
+Architecture: arm64
+
+=== PYTHON INFO ===
+/opt/homebrew/bin/python3
+Python 3.13.3
+
+=== HOMEBREW INFO ===
+/opt/homebrew/bin/brew
+Homebrew 5.0.8
+
+=== OPENSSL INFO ===
+Homebrew OpenSSL (Apple Silicon):
+-r--r--r--   1 apr  admin  4843248 Dec 30 14:03 libcrypto.3.dylib
+-r--r--r--   1 apr  admin  8563888 Oct  1 08:11 libcrypto.a
+lrwxr-xr-x   1 apr  admin       17 Oct  1 08:11 libcrypto.dylib -> libcrypto.3.dylib
+-r--r--r--   1 apr  admin   900224 Dec 30 14:03 libssl.3.dylib
+-r--r--r--   1 apr  admin  1464720 Oct  1 08:11 libssl.a
+lrwxr-xr-x   1 apr  admin       14 Oct  1 08:11 libssl.dylib -> libssl.3.dylib
+
+Homebrew OpenSSL (Intel):
+  Not found
+
+=== PYTHON OPENSSL LINKAGE ===
+Found _ssl.so at: /opt/homebrew/Cellar/python@3.11/3.11.12_1/Frameworks/Python.framework/Versions/3.11/lib/python3.11/lib-dynload/_ssl.cpython-311-darwin.so
+OpenSSL dependencies:
+	/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib (compatibility version 3.0.0, current version 3.0.0)
+	/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib (compatibility version 3.0.0, current version 3.0.0)
+
+=== VENV INFO ===
+Virtual environment exists
+Python in venv: /Users/apr/Developer/viam-qrcode/.venv/bin/python
+Python 3.11.12
+
+Key packages:
+opencv-python-headless    4.10.0.84
+pyzbar                    0.1.9
+viam-sdk                  0.31.0
+
+=== OPENCV OPENSSL ===
+opencv-python-headless OpenSSL libraries:
+-rw-r--r--   1 apr  staff  4214000 Jan  5 08:38 libcrypto.3.dylib
+-rw-r--r--   1 apr  staff   828112 Jan  5 08:38 libssl.3.dylib
+
+=== PYINSTALLER VERSION ===
+Version: 6.17.0
+
+
+############################################################
+# 2. BINARY INSPECTION
+############################################################
+=== BINARY SIZE ===
+-rwxr-xr-x  1 apr  staff    60M Jan  5 09:51 dist/main
+
+=== BINARY INFO ===
+dist/main: Mach-O 64-bit executable arm64
+
+=== CODE SIGNATURE ===
+Executable=/Users/apr/Developer/viam-qrcode/dist/main
+Identifier=main-55554944e51ae2820aba788a98a2440d850e5c0f
+Format=Mach-O thin (arm64)
+CodeDirectory v=20400 size=123334 flags=0x2(adhoc) hashes=3848+2 location=embedded
+Signature=adhoc
+Info.plist=not bound
+TeamIdentifier=not set
+Sealed Resources=none
+Internal requirements count=0 size=12
+
+=== RPATHS ===
+No RPATHs found
+
+=== EXTENDED ATTRIBUTES (quarantine, etc) ===
+
+=== STRINGS CHECK - OpenSSL References ===
+libssl references:
+
+libcrypto references:
+
+=== ARCHIVE CONTENTS ===
+First 20 files:
+main
+...
+
+OpenSSL libraries in archive:
+  None found
+
+=== OTOOL CHECK - Binary Dependencies ===
+dist/main:
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1351.0.0)
+	/usr/lib/libz.1.dylib (compatibility version 1.0.0, current version 1.2.12)
+
+
+############################################################
+# 3. RUNTIME EXTRACTION TEST
+############################################################
+=== TESTING RUNTIME EXTRACTION ===
+This will temporarily modify src/__main__.py to test extraction
+
+Building with test script...
+
+Running test...
+===============================================
+=== RUNTIME DIAGNOSTIC ===
+Python version: 3.11.12 (main, Apr  8 2025, 14:15:29) [Clang 17.0.0 (clang-1700.0.13.3)]
+Executable: /Users/apr/Developer/viam-qrcode/dist/main
+
+Temp directory: /var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T
+Found 1 _MEI directories
+
+Latest _MEI: /var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh
+Contents:
+ERROR scanning temp directory: [Errno 2] No such file or directory: '/var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh/libssl.3.dylib'
+
+=== ATTEMPTING SSL IMPORT ===
+✗ FAILED: dlopen(/var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh/python3.11/lib-dynload/_ssl.cpython-311-darwin.so, 0x0002): Library not loaded: @rpath/libssl.3.dylib
+  Referenced from: <C9D3CBC3-685B-3B20-B170-B18430274A41> /private/var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh/python3.11/lib-dynload/_ssl.cpython-311-darwin.so
+  Reason: tried: '/private/var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh/python3.11/lib-dynload/../../libssl.3.dylib' (no such file), '/private/var/folders/zv/yy4l17gx3_30qnn_rkw7j2qh0000gn/T/_MEIw4Xqlh/python3.11/lib-dynload/../../libssl.3.dylib' (no such file)
+
+This indicates the OpenSSL libraries are either:
+  1. Not in the bundle
+  2. In the bundle but not extracted
+  3. Extracted but not found by the dynamic linker
+===============================================
+
+✗ Test FAILED - OpenSSL import failed
+
+
+############################################################
+# 4. BUILD LOG ANALYSIS
+############################################################
+Rebuilding to capture build log...
+134 INFO: PyInstaller: 6.17.0, contrib hooks: 2025.11
+134 INFO: Python: 3.11.12
+141 INFO: Platform: macOS-26.2-arm64-arm-64bit
+141 INFO: Python environment: /Users/apr/Developer/viam-qrcode/.venv
+1216 INFO: Module search paths (PYTHONPATH):
+['/opt/homebrew/Cellar/python@3.11/3.11.12_1/Frameworks/Python.framework/Versions/3.11/lib/python311.zip',
+ '/opt/homebrew/Cellar/python@3.11/3.11.12_1/Frameworks/Python.framework/Versions/3.11/lib/python3.11',
+ '/opt/homebrew/Cellar/python@3.11/3.11.12_1/Frameworks/Python.framework/Versions/3.11/lib/python3.11/lib-dynload',
+ '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages',
+ '/Users/apr/Developer/viam-qrcode']
+1318 INFO: Appending 'binaries' from .spec
+1319 INFO: Appending 'datas' from .spec
+1325 INFO: checking Analysis
+1325 INFO: Building Analysis because Analysis-00.toc is non existent
+1325 INFO: Looking for Python shared library...
+1327 INFO: Using Python shared library: /opt/homebrew/Cellar/python@3.11/3.11.12_1/Frameworks/Python.framework/Versions/3.11/Python
+1327 INFO: Running Analysis Analysis-00.toc
+1327 INFO: Target bytecode optimization level: 0
+1327 INFO: Initializing module dependency graph...
+1327 INFO: Initializing module graph hook caches...
+1331 INFO: Analyzing modules for base_library.zip ...
+1599 INFO: Processing standard module hook 'hook-heapq.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+1631 INFO: Processing standard module hook 'hook-encodings.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+2226 INFO: Processing standard module hook 'hook-pickle.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+2817 INFO: Caching module dependency graph...
+2834 INFO: Analyzing /Users/apr/Developer/viam-qrcode/src/__main__.py
+2886 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+2958 INFO: Processing standard module hook 'hook-ssl.py' from '/Users/apr/Developer/viam-qrcode'
+2973 INFO: Processing standard module hook 'hook-xml.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+3082 INFO: Processing standard module hook 'hook-_ctypes.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+3241 INFO: Processing standard module hook 'hook-platform.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+3490 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks/pre_safe_import_module'
+3491 INFO: SetuptoolsInfo: initializing cached setuptools info...
+5322 INFO: Processing standard module hook 'hook-PIL.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+5363 INFO: Processing standard module hook 'hook-PIL.Image.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+5455 INFO: Processing standard module hook 'hook-numpy.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+5624 INFO: Processing standard module hook 'hook-sysconfig.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+5642 INFO: Processing standard module hook 'hook-_osx_support.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+6030 INFO: Processing standard module hook 'hook-difflib.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+6730 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks/pre_safe_import_module'
+6752 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+6771 INFO: Processing standard module hook 'hook-cv2.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+6922 INFO: Analyzing hidden import 'pyzbar.scripts'
+6922 INFO: Analyzing hidden import 'pyzbar.scripts.read_zbar'
+6923 INFO: Analyzing hidden import 'pyzbar.tests'
+6923 INFO: Analyzing hidden import 'pyzbar.tests.test_locations'
+6924 INFO: Analyzing hidden import 'pyzbar.tests.test_pyzbar'
+6964 INFO: Analyzing hidden import 'pyzbar.tests.test_read_zbar'
+6965 INFO: Analyzing hidden import 'pyzbar.tests.test_zbar_library'
+6967 INFO: Analyzing hidden import 'cv2.config'
+6967 INFO: Analyzing hidden import 'cv2.config-3'
+6968 INFO: Analyzing hidden import 'cv2.cv2'
+6968 INFO: Analyzing hidden import 'cv2.data'
+6968 INFO: Analyzing hidden import 'cv2.gapi'
+6972 INFO: Analyzing hidden import 'cv2.load_config_py2'
+6973 INFO: Analyzing hidden import 'cv2.mat_wrapper'
+6973 INFO: Analyzing hidden import 'cv2.misc'
+6973 INFO: Analyzing hidden import 'cv2.typing'
+6976 INFO: Analyzing hidden import 'cv2.utils'
+6976 INFO: Analyzing hidden import 'google.protobuf.api_pb2'
+6978 INFO: Analyzing hidden import 'google.protobuf.compiler'
+6978 INFO: Analyzing hidden import 'google.protobuf.compiler.plugin_pb2'
+6978 INFO: Analyzing hidden import 'google.protobuf.empty_pb2'
+6979 INFO: Analyzing hidden import 'google.protobuf.field_mask_pb2'
+6979 INFO: Analyzing hidden import 'google.protobuf.internal._parameterized'
+6982 INFO: Analyzing hidden import 'google.protobuf.internal.testing_refleaks'
+6984 INFO: Analyzing hidden import 'google.protobuf.proto'
+6984 INFO: Analyzing hidden import 'google.protobuf.proto_builder'
+6985 INFO: Analyzing hidden import 'google.protobuf.proto_json'
+6986 INFO: Analyzing hidden import 'google.protobuf.service'
+6987 INFO: Analyzing hidden import 'google.protobuf.testdata'
+6987 INFO: Analyzing hidden import 'google.protobuf.util'
+6987 INFO: Analyzing hidden import 'google.protobuf.wrappers_pb2'
+6988 INFO: Analyzing hidden import 'grpclib.channelz'
+6988 INFO: Analyzing hidden import 'grpclib.channelz.service'
+6992 INFO: Analyzing hidden import 'grpclib.health'
+6992 INFO: Analyzing hidden import 'grpclib.health.check'
+6995 INFO: Analyzing hidden import 'grpclib.health.service'
+6998 INFO: Analyzing hidden import 'grpclib.plugin'
+6999 INFO: Analyzing hidden import 'grpclib.plugin.main'
+7003 INFO: Analyzing hidden import 'grpclib.testing'
+7004 INFO: Analyzing hidden import 'viam.app'
+7004 INFO: Analyzing hidden import 'viam.app._logs'
+7005 INFO: Analyzing hidden import 'viam.app.app_client'
+7025 INFO: Analyzing hidden import 'viam.app.billing_client'
+7029 INFO: Analyzing hidden import 'viam.app.data_client'
+7046 INFO: Analyzing hidden import 'viam.app.ml_training_client'
+7050 INFO: Analyzing hidden import 'viam.app.provisioning_client'
+7054 INFO: Analyzing hidden import 'viam.app.viam_client'
+7056 INFO: Analyzing hidden import 'viam.components.arm'
+7068 INFO: Analyzing hidden import 'viam.components.audio_input'
+7086 INFO: Analyzing hidden import 'viam.components.base'
+7103 INFO: Analyzing hidden import 'viam.components.board'
+7125 INFO: Analyzing hidden import 'viam.components.encoder'
+7133 INFO: Analyzing hidden import 'viam.components.gantry'
+7143 INFO: Analyzing hidden import 'viam.components.generic'
+7148 INFO: Analyzing hidden import 'viam.components.gripper'
+7157 INFO: Analyzing hidden import 'viam.components.input'
+7171 INFO: Analyzing hidden import 'viam.components.motor'
+7186 INFO: Analyzing hidden import 'viam.components.pose_tracker'
+7192 INFO: Analyzing hidden import 'viam.components.power_sensor'
+7208 INFO: Analyzing hidden import 'viam.components.servo'
+7216 INFO: Analyzing hidden import 'viam.gen.app.agent'
+7216 INFO: Analyzing hidden import 'viam.gen.app.agent.v1'
+7217 INFO: Analyzing hidden import 'viam.gen.app.agent.v1.agent_grpc'
+7218 INFO: Analyzing hidden import 'viam.gen.app.agent.v1.agent_pb2'
+7219 INFO: Analyzing hidden import 'viam.gen.app.cloudslam'
+7219 INFO: Analyzing hidden import 'viam.gen.app.cloudslam.v1'
+7219 INFO: Analyzing hidden import 'viam.gen.app.cloudslam.v1.cloud_slam_grpc'
+7221 INFO: Analyzing hidden import 'viam.gen.app.cloudslam.v1.cloud_slam_pb2'
+7222 INFO: Analyzing hidden import 'viam.gen.app.v1.end_user_grpc'
+7223 INFO: Analyzing hidden import 'viam.gen.app.v1.end_user_pb2'
+7224 INFO: Analyzing hidden import 'viam.gen.common.v1.common_grpc'
+7224 INFO: Analyzing hidden import 'viam.gen.component.testecho'
+7225 INFO: Analyzing hidden import 'viam.gen.component.testecho.v1'
+7225 INFO: Analyzing hidden import 'viam.gen.component.testecho.v1.testecho_grpc'
+7226 INFO: Analyzing hidden import 'viam.gen.component.testecho.v1.testecho_pb2'
+7227 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples'
+7227 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echo'
+7227 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echo.v1'
+7227 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echo.v1.echo_grpc'
+7228 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echo.v1.echo_pb2'
+7229 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echoresource'
+7229 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echoresource.v1'
+7230 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echoresource.v1.echoresource_grpc'
+7231 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.echoresource.v1.echoresource_pb2'
+7231 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.fileupload'
+7232 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.fileupload.v1'
+7232 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.fileupload.v1.fileupload_grpc'
+7232 INFO: Analyzing hidden import 'viam.gen.proto.rpc.examples.fileupload.v1.fileupload_pb2'
+7233 INFO: Analyzing hidden import 'viam.gen.proto.rpc.webrtc.v1.grpc_grpc'
+7233 INFO: Analyzing hidden import 'viam.gen.proto.rpc.webrtc.v1.grpc_pb2'
+7234 INFO: Analyzing hidden import 'viam.gen.service.datamanager'
+7234 INFO: Analyzing hidden import 'viam.gen.service.datamanager.v1'
+7234 INFO: Analyzing hidden import 'viam.gen.service.datamanager.v1.data_manager_grpc'
+7235 INFO: Analyzing hidden import 'viam.gen.service.datamanager.v1.data_manager_pb2'
+7236 INFO: Analyzing hidden import 'viam.gen.service.generic'
+7236 INFO: Analyzing hidden import 'viam.gen.service.generic.v1'
+7237 INFO: Analyzing hidden import 'viam.gen.service.generic.v1.generic_grpc'
+7237 INFO: Analyzing hidden import 'viam.gen.service.generic.v1.generic_pb2'
+7238 INFO: Analyzing hidden import 'viam.gen.service.mlmodel'
+7238 INFO: Analyzing hidden import 'viam.gen.service.mlmodel.v1'
+7238 INFO: Analyzing hidden import 'viam.gen.service.mlmodel.v1.mlmodel_grpc'
+7239 INFO: Analyzing hidden import 'viam.gen.service.mlmodel.v1.mlmodel_pb2'
+7241 INFO: Analyzing hidden import 'viam.gen.service.motion'
+7241 INFO: Analyzing hidden import 'viam.gen.service.motion.v1'
+7241 INFO: Analyzing hidden import 'viam.gen.service.motion.v1.motion_grpc'
+7243 INFO: Analyzing hidden import 'viam.gen.service.motion.v1.motion_pb2'
+7246 INFO: Analyzing hidden import 'viam.gen.service.navigation'
+7246 INFO: Analyzing hidden import 'viam.gen.service.navigation.v1'
+7246 INFO: Analyzing hidden import 'viam.gen.service.navigation.v1.navigation_grpc'
+7248 INFO: Analyzing hidden import 'viam.gen.service.navigation.v1.navigation_pb2'
+7250 INFO: Analyzing hidden import 'viam.gen.service.sensors'
+7250 INFO: Analyzing hidden import 'viam.gen.service.sensors.v1'
+7251 INFO: Analyzing hidden import 'viam.gen.service.sensors.v1.sensors_grpc'
+7252 INFO: Analyzing hidden import 'viam.gen.service.sensors.v1.sensors_pb2'
+7253 INFO: Analyzing hidden import 'viam.gen.service.shell'
+7253 INFO: Analyzing hidden import 'viam.gen.service.shell.v1'
+7254 INFO: Analyzing hidden import 'viam.gen.service.shell.v1.shell_grpc'
+7255 INFO: Analyzing hidden import 'viam.gen.service.shell.v1.shell_pb2'
+7256 INFO: Analyzing hidden import 'viam.gen.service.slam'
+7256 INFO: Analyzing hidden import 'viam.gen.service.slam.v1'
+7257 INFO: Analyzing hidden import 'viam.gen.service.slam.v1.slam_grpc'
+7258 INFO: Analyzing hidden import 'viam.gen.service.slam.v1.slam_pb2'
+7259 INFO: Analyzing hidden import 'viam.gen.stream'
+7259 INFO: Analyzing hidden import 'viam.gen.stream.v1'
+7259 INFO: Analyzing hidden import 'viam.gen.stream.v1.stream_grpc'
+7261 INFO: Analyzing hidden import 'viam.gen.stream.v1.stream_pb2'
+7261 INFO: Analyzing hidden import 'viam.gen.tagger.v1.tagger_grpc'
+7262 INFO: Analyzing hidden import 'viam.proto.app.agent'
+7262 INFO: Analyzing hidden import 'viam.proto.app.cloudslam'
+7263 INFO: Analyzing hidden import 'viam.proto.app.end_user'
+7263 INFO: Analyzing hidden import 'viam.proto.component.testecho'
+7263 INFO: Analyzing hidden import 'viam.proto.rpc.examples'
+7264 INFO: Analyzing hidden import 'viam.proto.rpc.examples.echo'
+7264 INFO: Analyzing hidden import 'viam.proto.rpc.examples.echoresource'
+7264 INFO: Analyzing hidden import 'viam.proto.rpc.examples.fileupload'
+7265 INFO: Analyzing hidden import 'viam.proto.rpc.webrtc.grpc'
+7265 INFO: Analyzing hidden import 'viam.proto.service.datamanager'
+7265 INFO: Analyzing hidden import 'viam.proto.service.generic'
+7265 INFO: Analyzing hidden import 'viam.proto.service.mlmodel'
+7266 INFO: Analyzing hidden import 'viam.proto.service.motion'
+7266 INFO: Analyzing hidden import 'viam.proto.service.navigation'
+7266 INFO: Analyzing hidden import 'viam.proto.service.sensors'
+7267 INFO: Analyzing hidden import 'viam.proto.service.shell'
+7267 INFO: Analyzing hidden import 'viam.proto.service.slam'
+7267 INFO: Analyzing hidden import 'viam.proto.stream'
+7268 INFO: Analyzing hidden import 'viam.proto.tagger'
+7268 INFO: Analyzing hidden import 'viam.resource.easy_resource'
+7269 INFO: Analyzing hidden import 'viam.services.generic'
+7272 INFO: Analyzing hidden import 'viam.services.mlmodel'
+7277 INFO: Analyzing hidden import 'viam.services.motion'
+7284 INFO: Analyzing hidden import 'viam.services.navigation'
+7291 INFO: Analyzing hidden import 'viam.services.sensors'
+7294 INFO: Analyzing hidden import 'viam.services.slam'
+7298 INFO: Processing module hooks (post-graph stage)...
+7396 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+7451 INFO: Performing binary vs. data reclassification (709 entries)
+7550 INFO: Looking for ctypes DLLs
+7568 INFO: Analyzing run-time hooks ...
+7571 INFO: Including run-time hook 'pyi_rth_inspect.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks'
+7572 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks'
+7572 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks'
+7585 INFO: Creating base_library.zip...
+7593 INFO: Looking for dynamic libraries
+7756 INFO: Warnings written to /Users/apr/Developer/viam-qrcode/build/main/warn-main.txt
+7778 INFO: Graph cross-reference written to /Users/apr/Developer/viam-qrcode/build/main/xref-main.html
+7885 INFO: checking PYZ
+7885 INFO: Building PYZ because PYZ-00.toc is non existent
+7885 INFO: Building PYZ (ZlibArchive) /Users/apr/Developer/viam-qrcode/build/main/PYZ-00.pyz
+8231 INFO: Building PYZ (ZlibArchive) /Users/apr/Developer/viam-qrcode/build/main/PYZ-00.pyz completed successfully.
+8238 INFO: EXE target arch: arm64
+8238 INFO: Code signing identity: None
+8242 INFO: checking PKG
+8242 INFO: Building PKG because PKG-00.toc is non existent
+8242 INFO: Building PKG (CArchive) main.pkg
+16619 INFO: Building PKG (CArchive) main.pkg completed successfully.
+16625 INFO: Bootloader /Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/bootloader/Darwin-64bit/run
+16625 INFO: checking EXE
+16625 INFO: Building EXE because EXE-00.toc is non existent
+16625 INFO: Building EXE from EXE-00.toc
+16625 INFO: Copying bootloader EXE to /Users/apr/Developer/viam-qrcode/dist/main
+16625 INFO: Converting EXE to target arch (arm64)
+16636 INFO: Removing signature(s) from EXE
+16645 INFO: Modifying Mach-O image UUID(s) in EXE
+16672 INFO: Appending PKG archive to EXE
+16683 INFO: Fixing EXE headers for code signing
+16685 INFO: Rewriting the executable's macOS SDK version (15.5.0) to match the SDK version of the Python library (15.4.0) in order to avoid inconsistent behavior and potential UI issues in the frozen application.
+16686 INFO: Re-signing the EXE
+16739 INFO: Building EXE from EXE-00.toc completed successfully.
+16745 INFO: Build complete! The results are available in: /Users/apr/Developer/viam-qrcode/dist
+hook-ssl: Adding OpenSSL library: /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib
+hook-ssl: Adding OpenSSL library: /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib
+hook-ssl: Collected 2 OpenSSL libraries
+
+Filtering opencv OpenSSL and adding system OpenSSL:
+  Removed opencv OpenSSL: 2 binaries, 0 datas
+  Added system OpenSSL: /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib as libssl.3.dylib
+  Added system OpenSSL: /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib as libcrypto.3.dylib
+OpenSSL libraries in final binaries list: 2
+  - libssl.3.dylib -> /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib
+  - libcrypto.3.dylib -> /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib
+
+Build complete! Archive created at dist/archive.tar.gz
+
+Key sections from build log:
+
+--- OpenSSL Filtering ---
+Filtering opencv OpenSSL and adding system OpenSSL:
+  Removed opencv OpenSSL: 2 binaries, 0 datas
+  Added system OpenSSL: /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib as libssl.3.dylib
+  Added system OpenSSL: /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib as libcrypto.3.dylib
+OpenSSL libraries in final binaries list: 2
+  - libssl.3.dylib -> /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib
+  - libcrypto.3.dylib -> /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib
+
+Build complete! Archive created at dist/archive.tar.gz
+
+--- hook-ssl execution ---
+2958 INFO: Processing standard module hook 'hook-ssl.py' from '/Users/apr/Developer/viam-qrcode'
+2973 INFO: Processing standard module hook 'hook-xml.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+3082 INFO: Processing standard module hook 'hook-_ctypes.py' from '/Users/apr/Developer/viam-qrcode/.venv/lib/python3.11/site-packages/PyInstaller/hooks'
+--
+hook-ssl: Adding OpenSSL library: /opt/homebrew/opt/openssl@3/lib/libssl.3.dylib
+hook-ssl: Adding OpenSSL library: /opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib
+hook-ssl: Collected 2 OpenSSL libraries
+
+Filtering opencv OpenSSL and adding system OpenSSL:
+
+
+############################################################
+# 5. SUMMARY
+############################################################
+Test Results:
+  ✗ Runtime extraction test: FAILED
+  ✗ OpenSSL import fails on this machine
+
+Next steps:
+  - This machine has the OpenSSL issue
+  - Compare this report with a working machine
+  - Check if OpenSSL libraries are in the bundle
+  - Check if they're being extracted to _MEI directory
+
+===================================================================
+END OF REPORT
+===================================================================
