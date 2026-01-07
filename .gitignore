@@ -5,6 +5,11 @@ qrExample.png
 .DS_Store
 module.tar.gz
 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
 # PyInstaller build artifacts
 build/
 dist/
