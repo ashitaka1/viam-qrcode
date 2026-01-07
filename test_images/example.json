@@ -1,0 +1,25 @@
+{
+  "description": "Example annotation file showing the expected format",
+  "image": "example.jpg",
+  "expected_detections": [
+    {
+      "data": "https://example.com",
+      "bbox": {
+        "x_min": 100,
+        "y_min": 150,
+        "x_max": 350,
+        "y_max": 400
+      }
+    },
+    {
+      "data": "SECOND_QR_CODE",
+      "bbox": {
+        "x_min": 500,
+        "y_min": 150,
+        "x_max": 750,
+        "y_max": 400
+      }
+    }
+  ],
+  "min_iou": 0.5
+}

@@ -11,5 +11,6 @@ pillow==10.4.0
 protobuf==5.28.2
 python-dotenv==1.0.1
 pyzbar==0.1.9
+qrcode==8.0
 typing_extensions==4.12.2
 viam-sdk==0.31.0

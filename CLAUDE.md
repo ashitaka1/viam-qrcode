@@ -36,6 +36,9 @@ python process.py
 
 # Run regression tests
 python test_pyzbar_vision.py
+
+# Run bounding box accuracy tests (1-16 QR codes)
+python test_bounding_boxes.py
 ```
 
 ### Building for Distribution
@@ -160,9 +163,44 @@ The module implements the Viam Vision service API (`src/pyzbar.py`):
 
 ## Testing
 
+### Regression Tests
 Run regression tests with: `python test_pyzbar_vision.py`
 
 The test validates that `get_detections()` correctly handles PIL images without crashing, using `image.jpg` as test data.
+
+### Bounding Box Accuracy Tests
+Run bounding box accuracy tests with: `python test_bounding_boxes.py`
+
+This comprehensive test suite validates that pyzbar returns accurate bounding boxes under various conditions:
+
+**Synthetic Tests:**
+- Tests 1-16 QR codes simultaneously in a single image
+- Generates synthetic test images with QR codes at known positions
+- Uses actual pyzbar.decode() (not mocked) to detect QR codes
+- Validates bounding boxes using Intersection over Union (IoU) metric
+- Requires IoU ≥ 0.5 (50% overlap), typically achieves IoU > 0.83
+- Requires `qrcode` library for generating test images
+
+**Real-World Image Tests:**
+- Tests with actual camera/photo images (not synthetic) and annotated bounding boxes
+- Add your own photos/camera captures to `test_images/` directory
+- Use `create_annotation.py` helper to auto-generate JSON annotations
+- Format: `image.jpg` + `image.json` (see `test_images/README.md`)
+- Useful for regression testing with production images
+- JSON format:
+  ```json
+  {
+    "description": "Test case description",
+    "image": "filename.jpg",
+    "expected_detections": [
+      {
+        "data": "QR_CODE_CONTENT",
+        "bbox": {"x_min": 100, "y_min": 200, "x_max": 300, "y_max": 400}
+      }
+    ],
+    "min_iou": 0.5
+  }
+  ```
 
 ## Notes
 
